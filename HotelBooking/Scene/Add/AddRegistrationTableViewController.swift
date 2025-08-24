@@ -7,212 +7,310 @@
 
 import UIKit
 
-class AddRegistrationTableViewController: UITableViewController {
+// MARK: - Add Registration Table View Controller
+final class AddRegistrationTableViewController: UITableViewController {
     
-    //MARK: - UI Elements
-    @IBOutlet weak var firstNameTextField: UITextField!
-    @IBOutlet weak var lastNameTextField: UITextField!
-    @IBOutlet weak var emailTextField: UITextField!
+    // MARK: - IBOutlets
+    @IBOutlet private weak var firstNameTextField: UITextField!
+    @IBOutlet private weak var lastNameTextField: UITextField!
+    @IBOutlet private weak var emailTextField: UITextField!
+    @IBOutlet private weak var checkInDateLabel: UILabel!
+    @IBOutlet private weak var checkInDatePicker: UIDatePicker!
+    @IBOutlet private weak var checkOutDateLabel: UILabel!
+    @IBOutlet private weak var checkOutDatePicker: UIDatePicker!
+    @IBOutlet private weak var numberOfAdultsLabel: UILabel!
+    @IBOutlet private weak var numberOfAdultsStepper: UIStepper!
+    @IBOutlet private weak var numberOfChildrenLabel: UILabel!
+    @IBOutlet private weak var numberOfChildrenStepper: UIStepper!
+    @IBOutlet private weak var wifiSwitch: UISwitch!
+    @IBOutlet private weak var roomTypeLabel: UILabel!
     
-    @IBOutlet weak var checkInDateLabel: UILabel!
-    @IBOutlet weak var checkInDatePicker : UIDatePicker!
-    @IBOutlet weak var checkOutDateLabel: UILabel!
-    @IBOutlet weak var checkOutDatePicker: UIDatePicker!
+    // MARK: - Dependencies
+    private let viewModel: AddRegistrationViewModelProtocol
     
-    @IBOutlet weak var numberOfAdultsLabel : UILabel!
-    @IBOutlet weak var numberOfAdultsStepper: UIStepper!
+    // MARK: - Properties
+
     
-    @IBOutlet weak var numberOfChildrenLabel : UILabel!
-    @IBOutlet weak var numberOfChildrenStepper: UIStepper!
-    
-    @IBOutlet weak var wifiSwitch: UISwitch!
-    
-    @IBOutlet weak var roomTypeLabel: UILabel!
-    
-    
-    
-    //MARK: - Properties
-    let checkInDateLabelIndexPath = IndexPath(row: 0, section: 1)
-    let checkInDatePickerCellIndexPath = IndexPath(row: 1, section: 1)
-    
-    let checkOutDateLabelIndexPath = IndexPath(item: 2, section: 1)
-    let checkOutDatePickerCellIndexPath = IndexPath(row: 3, section: 1)
-    
-    
-    var isCheckInDatePickerShown : Bool = false {
+    private var isCheckInDatePickerVisible = false {
         didSet {
-            checkInDatePicker.isHidden = !isCheckInDatePickerShown
+            checkInDatePicker.isHidden = !isCheckInDatePickerVisible
         }
     }
     
-    var isCheckOutDatePickerShown : Bool = false {
+    private var isCheckOutDatePickerVisible = false {
         didSet {
-            checkOutDateLabel.isHidden = !isCheckOutDatePickerShown
+            checkOutDatePicker.isHidden = !isCheckOutDatePickerVisible
         }
     }
     
-    var registration: Registration? {
-        guard let roomType = roomType else { return nil }
-        
-        let firstName = firstNameTextField.text!
-        let lastName = lastNameTextField.text!
-        let email = emailTextField.text!
-        let checkOutDate = checkOutDatePicker.date
-        let checkInDate = checkInDatePicker.date
-        let numberOfAdults = Int(numberOfAdultsStepper.value)
-        let numberOfChildren = Int(numberOfChildrenStepper.value)
-        let hashWifi = wifiSwitch.isOn
-        
-        return Registration(firstName: firstName, lastName: lastName, emailAdress: email, chechInDate: checkInDate, checkOutDate: checkOutDate, numberOfAdults: numberOfAdults, numberOfChildren: numberOfChildren, roomType: roomType, wifi: hashWifi)
+    // MARK: - Computed Properties
+    var currentRegistration: Registration? {
+        return viewModel.currentRegistration
     }
     
-    var roomType : RoomType?
+    // MARK: - Initialization
+    init(container: DIContainerProtocol = DIContainer()) {
+        self.viewModel = container.resolve(AddRegistrationViewModelProtocol.self)
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    //MARK: - Lifecycle
+    required init?(coder: NSCoder) {
+        let container = DIContainer()
+        self.viewModel = container.resolve(AddRegistrationViewModelProtocol.self)
+        super.init(coder: coder)
+    }
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        settingsDatePicker()
-        updateNumberOfGuests()
-        updateRoomType()
+        setupUI()
+        configureInitialValues()
+    }
+    
+    // MARK: - Setup Methods
+    private func setupUI() {
+        setupNavigationBar()
+        setupDatePickers()
+        setupSteppers()
+        setupTextFields()
+        bindViewModel()
+    }
+    
+    private func bindViewModel() {
+        // Bind text fields to view model
+        firstNameTextField.addTarget(self, action: #selector(firstNameChanged), for: .editingChanged)
+        lastNameTextField.addTarget(self, action: #selector(lastNameChanged), for: .editingChanged)
+        emailTextField.addTarget(self, action: #selector(emailChanged), for: .editingChanged)
+    }
+    
+    private func setupNavigationBar() {
+        navigationItem.title = "Add Registration"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .save,
+            target: self,
+            action: #selector(saveButtonTapped)
+        )
+    }
+    
+    private func setupDatePickers() {
+        let minimumDate = viewModel.minimumCheckInDate
         
+        checkInDatePicker.minimumDate = minimumDate
+        checkInDatePicker.date = viewModel.checkInDate
         
+        checkOutDatePicker.minimumDate = viewModel.minimumCheckOutDate
+        checkOutDatePicker.date = viewModel.checkOutDate
         
+        // Hide pickers initially
+        isCheckInDatePickerVisible = false
+        isCheckOutDatePickerVisible = false
     }
     
-    
-    
-    //MARK: - Actions
-    @IBAction func cancelButtonClicked(_ sender: UIBarButtonItem) {
-     dismiss(animated: true)
-    }
-    
-    @IBAction func datePickerValueChanged(_ picker: UIPickerView) {
-        updateDateViews()
-    }
-    
-    @IBAction func stepperValueChanged(_ stepper: UIStepper) {
-        updateNumberOfGuests()
-    }
-    
-    @IBAction func wifiSwitchValueChanged(_ switch: UISwitch) {
+    private func setupSteppers() {
+        numberOfAdultsStepper.minimumValue = Constants.GuestLimits.minAdults
+        numberOfAdultsStepper.maximumValue = Constants.GuestLimits.maxAdults
+        numberOfAdultsStepper.stepValue = Constants.GuestLimits.stepValue
+        numberOfAdultsStepper.value = viewModel.numberOfAdults
         
-    }
-}
-
-
-
-//MARK: - Helpers
-extension AddRegistrationTableViewController {
-    private func updateDateViews() {
-        // 21/03/2023 -> .medium  -> March 21, 2023
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        
-        checkInDateLabel.text = dateFormatter.string(from: checkInDatePicker.date)
-        checkOutDateLabel.text = dateFormatter.string(from: checkOutDatePicker.date)
+        numberOfChildrenStepper.minimumValue = Constants.GuestLimits.minChildren
+        numberOfChildrenStepper.maximumValue = Constants.GuestLimits.maxChildren
+        numberOfChildrenStepper.stepValue = Constants.GuestLimits.stepValue
+        numberOfChildrenStepper.value = viewModel.numberOfChildren
     }
     
-    private func updateNumberOfGuests() {
-        numberOfAdultsLabel.text = "\(Int(numberOfAdultsStepper.value))"
-        numberOfChildrenLabel.text = "\(Int(numberOfChildrenStepper.value))"
+    private func setupTextFields() {
+        firstNameTextField.delegate = self
+        lastNameTextField.delegate = self
+        emailTextField.delegate = self
+        emailTextField.keyboardType = .emailAddress
+        emailTextField.autocapitalizationType = .none
     }
     
-    private func settingsDatePicker() {
-        let midnightToday = Calendar.current.startOfDay(for: Date())
-        let oneDay : Double = 24 * 60 * 60
-        checkOutDatePicker.minimumDate = checkInDatePicker.date.addingTimeInterval(oneDay)
-        
-        checkInDatePicker.minimumDate = midnightToday
-        checkOutDatePicker.date = midnightToday
+    private func configureInitialValues() {
+        updateDateLabels()
+        updateGuestLabels()
+        updateRoomTypeLabel()
     }
     
-    private func updateRoomType() {
-        if let roomType = roomType {
-            roomTypeLabel.text = roomType.name
+    // MARK: - IBActions
+    @IBAction private func cancelButtonTapped(_ sender: UIBarButtonItem) {
+        dismiss(animated: true)
+    }
+    
+    @objc private func saveButtonTapped() {
+        validateAndSaveRegistration()
+    }
+    
+    @objc private func firstNameChanged() {
+        viewModel.firstName = firstNameTextField.text ?? ""
+    }
+    
+    @objc private func lastNameChanged() {
+        viewModel.lastName = lastNameTextField.text ?? ""
+    }
+    
+    @objc private func emailChanged() {
+        viewModel.email = emailTextField.text ?? ""
+    }
+    
+    @IBAction private func datePickerValueChanged(_ sender: UIDatePicker) {
+        if sender == checkInDatePicker {
+            viewModel.updateCheckInDate(sender.date)
+            checkOutDatePicker.minimumDate = viewModel.minimumCheckOutDate
+            checkOutDatePicker.date = viewModel.checkOutDate
         } else {
-            roomTypeLabel.text = "No set"
+            viewModel.checkOutDate = sender.date
         }
-    }
-}
-
-
-//MARK: - TableViewDelegate
-extension AddRegistrationTableViewController {
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "selectRoomType" {
-            let destination = segue.destination as? SelectRoomTypeTableViewController
-            destination?.delegate = self
-            destination?.selectedRoomType = roomType
-        }
+        updateDateLabels()
     }
     
-    //height
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        switch indexPath {
-        case checkInDatePickerCellIndexPath :
-            
-            if isCheckInDatePickerShown {
-                return 216
-            } else {
-                return 0
-            }
-            
-        case checkOutDatePickerCellIndexPath:
-            if isCheckOutDatePickerShown {
-                return 216
-            } else {
-                return 0
-            }
-        default:
-            return 44
+    @IBAction private func stepperValueChanged(_ sender: UIStepper) {
+        if sender == numberOfAdultsStepper {
+            viewModel.numberOfAdults = sender.value
+        } else {
+            viewModel.numberOfChildren = sender.value
         }
+        updateGuestLabels()
     }
     
-    //select
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+    @IBAction private func wifiSwitchValueChanged(_ sender: UISwitch) {
+        viewModel.hasWifi = sender.isOn
+    }
+    
+    // MARK: - Private Methods
+    private func updateDateLabels() {
+        checkInDateLabel.text = viewModel.checkInDateFormatted
+        checkOutDateLabel.text = viewModel.checkOutDateFormatted
+    }
+    
+    private func updateGuestLabels() {
+        numberOfAdultsLabel.text = viewModel.numberOfAdultsText
+        numberOfChildrenLabel.text = viewModel.numberOfChildrenText
+    }
+    
+    private func updateRoomTypeLabel() {
+        roomTypeLabel.text = viewModel.roomTypeDisplayText
+    }
+    
+    private func validateAndSaveRegistration() {
+        let validationResult = viewModel.validateRegistration()
         
+        switch validationResult {
+        case .valid:
+            // Save registration logic here
+            performSegue(withIdentifier: Constants.Segues.saveRegistration, sender: currentRegistration)
+        case .invalid(let message):
+            showErrorAlert(message: message)
+        }
+    }
+    
+    private func showErrorAlert(message: String) {
+        let alert = UIAlertController(
+            title: "Validation Error",
+            message: message,
+            preferredStyle: .alert
+        )
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+    
+    private func toggleDatePicker(for indexPath: IndexPath) {
         switch indexPath {
-        case checkInDateLabelIndexPath:
-            
-            if isCheckInDatePickerShown {
-                isCheckInDatePickerShown = false
-            } else if isCheckInDatePickerShown {
-                isCheckOutDatePickerShown = false
-                isCheckInDatePickerShown = true
-            } else {
-                isCheckInDatePickerShown = true
+        case viewModel.checkInDateLabelIndexPath:
+            if isCheckOutDatePickerVisible {
+                isCheckOutDatePickerVisible = false
             }
+            isCheckInDatePickerVisible.toggle()
             
-            tableView.beginUpdates()
-            tableView.endUpdates()
-            
-        case checkOutDateLabelIndexPath:
-            if isCheckOutDatePickerShown {
-                isCheckOutDatePickerShown = false
-            } else if isCheckInDatePickerShown {
-                isCheckOutDatePickerShown = true
-                isCheckInDatePickerShown = false
-            } else {
-                isCheckOutDatePickerShown = true
+        case viewModel.checkOutDateLabelIndexPath:
+            if isCheckInDatePickerVisible {
+                isCheckInDatePickerVisible = false
             }
+            isCheckOutDatePickerVisible.toggle()
             
-            tableView.beginUpdates()
-            tableView.endUpdates()
         default:
             break
         }
+        
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 }
 
+// MARK: - Table View Delegate & Data Source
+extension AddRegistrationTableViewController {
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == Constants.Segues.selectRoomType,
+           let destination = segue.destination as? SelectRoomTypeTableViewController {
+            destination.delegate = self
+            destination.selectedRoomType = viewModel.roomType
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath {
+        case viewModel.checkInDatePickerIndexPath:
+            return isCheckInDatePickerVisible ? Constants.UI.datePickerHeight : 0
+        case viewModel.checkOutDatePickerIndexPath:
+            return isCheckOutDatePickerVisible ? Constants.UI.datePickerHeight : 0
+        default:
+            return Constants.UI.defaultRowHeight
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        if indexPath == viewModel.checkInDateLabelIndexPath || indexPath == viewModel.checkOutDateLabelIndexPath {
+            toggleDatePicker(for: indexPath)
+        }
+    }
+}
 
-//MARK: - SelectRoomTypeTableViewControllerDelegate
+// MARK: - Text Field Delegate
+extension AddRegistrationTableViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case firstNameTextField:
+            lastNameTextField.becomeFirstResponder()
+        case lastNameTextField:
+            emailTextField.becomeFirstResponder()
+        case emailTextField:
+            textField.resignFirstResponder()
+        default:
+            textField.resignFirstResponder()
+        }
+        return true
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        // Perform validation if needed
+        if textField == emailTextField {
+            validateEmailField()
+        }
+    }
+    
+    private func validateEmailField() {
+        let result = viewModel.validateEmail()
+        if case .invalid = result {
+            // Show validation feedback (red border, etc.)
+            emailTextField.layer.borderColor = UIColor.red.cgColor
+            emailTextField.layer.borderWidth = Constants.UI.borderWidth
+        } else {
+            // Clear validation feedback
+            emailTextField.layer.borderColor = UIColor.clear.cgColor
+            emailTextField.layer.borderWidth = 0
+        }
+    }
+}
+
+// MARK: - Select Room Type Delegate
 extension AddRegistrationTableViewController: SelectRoomTypeTableViewControllerDelegate {
+    
     func didSelect(roomType: RoomType) {
-        self.roomType = roomType
-        updateRoomType()
+        viewModel.roomType = roomType
+        updateRoomTypeLabel()
     }
 }
-

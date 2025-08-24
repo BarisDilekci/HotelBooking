@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ceo-In-dX8">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ceo-In-dX8">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,9 +64,9 @@
             <objects>
                 <tableViewController id="v2f-E6-byo" customClass="AddRegistrationTableViewController" customModule="HotelBooking" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="HRX-Vy-Mz9">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="groupTableViewBackgroundColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <sections>
                             <tableViewSection id="c4n-Nj-PDD">
                                 <cells>
@@ -251,10 +250,10 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Znq-E0-6q7">
-                                        <rect key="frame" x="0.0" y="784.00000762939453" width="393" height="44"/>
+                                        <rect key="frame" x="0.0" y="784.00000762939453" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Znq-E0-6q7" id="pxZ-Kv-GES">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Children" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hen-PI-OIj">
@@ -286,7 +285,7 @@
                             <tableViewSection id="eWL-pj-N10">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="pR3-iW-aCd">
-                                        <rect key="frame" x="0.0" y="864.00000762939453" width="393" height="43.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="863.66667556762695" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pR3-iW-aCd" id="z7A-5J-4QP">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
@@ -327,7 +326,7 @@
                             <tableViewSection id="aLF-Yr-zPi">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="YZc-ff-ohN" detailTextLabel="Axh-rE-vha" style="IBUITableViewCellStyleValue1" id="r5d-81-ZXE">
-                                        <rect key="frame" x="0.0" y="943.66667556762695" width="393" height="43.666667938232422"/>
+                                        <rect key="frame" x="0.0" y="943.33334350585938" width="393" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="r5d-81-ZXE" id="4fj-1O-rpF">
                                             <rect key="frame" x="0.0" y="0.0" width="374.66666666666669" height="43.666667938232422"/>
@@ -364,7 +363,7 @@
                     <navigationItem key="navigationItem" title="Registration" id="pVM-dB-CXj">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Jty-gB-Vqc">
                             <connections>
-                                <action selector="cancelButtonClicked:" destination="v2f-E6-byo" id="vPk-xA-xwD"/>
+                                <action selector="cancelButtonTapped:" destination="v2f-E6-byo" id="d9d-LK-xg1"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="ZxP-pw-BcK">
@@ -374,20 +373,20 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="checkInDateLabel" destination="5gi-dF-smb" id="qeW-FK-TYd"/>
-                        <outlet property="checkInDatePicker" destination="FUK-cf-qIU" id="QhS-J2-d8D"/>
-                        <outlet property="checkOutDateLabel" destination="w5p-Dz-m0G" id="tiE-BG-iaX"/>
-                        <outlet property="checkOutDatePicker" destination="FUX-Cg-1fj" id="ZNN-ug-Omy"/>
-                        <outlet property="emailTextField" destination="9pp-o5-pnP" id="9DI-ne-sCR"/>
-                        <outlet property="firstNameTextField" destination="RmE-Gt-osI" id="sCf-yo-zfr"/>
-                        <outlet property="lastNameTextField" destination="6xL-WO-q4H" id="hQv-Jt-CoN"/>
+                        <outlet property="checkInDateLabel" destination="5gi-dF-smb" id="DwT-J0-ogt"/>
+                        <outlet property="checkInDatePicker" destination="FUK-cf-qIU" id="VyW-Wl-kPE"/>
+                        <outlet property="checkOutDateLabel" destination="w5p-Dz-m0G" id="mcF-Df-hrQ"/>
+                        <outlet property="checkOutDatePicker" destination="FUX-Cg-1fj" id="uvF-Qy-4pK"/>
+                        <outlet property="emailTextField" destination="9pp-o5-pnP" id="N2j-U4-l1o"/>
+                        <outlet property="firstNameTextField" destination="RmE-Gt-osI" id="7Jh-1V-xp9"/>
+                        <outlet property="lastNameTextField" destination="6xL-WO-q4H" id="VTR-3x-LEC"/>
                         <outlet property="numberOfAdultsLabel" destination="TQh-6M-zI9" id="h6o-0P-jl5"/>
                         <outlet property="numberOfAdultsStepper" destination="pkP-8J-9gA" id="vVh-X4-v6O"/>
                         <outlet property="numberOfChildrenLabel" destination="SH4-zh-0J5" id="3mA-nE-yTD"/>
                         <outlet property="numberOfChildrenStepper" destination="Znj-to-Elb" id="tDW-Be-YVI"/>
                         <outlet property="roomTypeLabel" destination="Axh-rE-vha" id="AuC-CY-C9m"/>
                         <outlet property="wifiSwitch" destination="H1g-tE-rnN" id="f2u-1h-0Bq"/>
-                        <segue destination="Xf2-CU-pvy" kind="unwind" unwindAction="unwindFromAddRegistrationWithUnwindSegue:" id="0Yy-eK-LWM"/>
+                        <segue destination="Xf2-CU-pvy" kind="unwind" identifier="unwindToRegistrationList" unwindAction="unwindFromAddRegistrationWithUnwindSegue:" id="0Yy-eK-LWM"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4Dz-kV-Pm6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -400,7 +399,7 @@
             <objects>
                 <tableViewController id="7pN-aj-FVz" customClass="SelectRoomTypeTableViewController" customModule="HotelBooking" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="aeA-KY-Cfy">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
@@ -465,7 +464,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ceo-In-dX8" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bCy-1r-GA0">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <rect key="frame" x="0.0" y="118" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -479,9 +478,6 @@
         </scene>
     </scenes>
     <resources>
-        <systemColor name="groupTableViewBackgroundColor">
-            <color red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

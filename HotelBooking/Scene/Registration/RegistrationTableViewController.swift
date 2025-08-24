@@ -7,11 +7,11 @@
 
 import UIKit
 
-class RegistrationTableViewController: UITableViewController {
+final class RegistrationTableViewController: UITableViewController {
     
     
     //MARK: - Properties
-    var registrations = [Registration]()
+   private var registrations = [Registration]()
     
     //MARK: - Lifecycle
     override func viewDidLoad() {
@@ -23,7 +23,7 @@ class RegistrationTableViewController: UITableViewController {
     //MARK: - Actions
     
     @IBAction func unwindFromAddRegistration(unwindSegue: UIStoryboardSegue) {
-        guard let source = unwindSegue.source as? AddRegistrationTableViewController, let registraion = source.registration else { return }
+        guard let source = unwindSegue.source as? AddRegistrationTableViewController, let registraion = source.currentRegistration else { return }
         
         
         registrations.append(registraion)

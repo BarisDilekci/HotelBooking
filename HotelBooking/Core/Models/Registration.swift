@@ -10,7 +10,7 @@ import Foundation
 struct Registration {
     var firstName: String
     var lastName: String
-    var emailAdress: String
+    var emailAddress: String
     
     //date
     var chechInDate: Date
